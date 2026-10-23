@@ -106,3 +106,35 @@ Algunas ideas para experimentar después:
 - Correr la suite en Chromium, Firefox y WebKit.
 - Probar el usuario `lento` sin esperas fijas.
 - Comparar los page objects que escribe el agente con el MCP de Playwright conectado y sin él.
+
+## Suite de pruebas
+
+```bash
+npm install
+npx playwright install    # Chromium, Firefox y WebKit
+npm test                  # levanta la tienda en :4173 y corre la suite en los tres navegadores
+npm run reporte           # abre el reporte HTML de Playwright
+```
+
+`npm run test:chromium` corre solo Chromium. `npm run typecheck` revisa los tipos.
+
+| Ruta | Qué es |
+|---|---|
+| `pages/` | Page objects: uno por página de la tienda y `Encabezado` para el encabezado común. Son los únicos archivos con localizadores. |
+| `support/datos.ts` | Precios, usuarios y cupón tomados de las reglas. Son el oráculo de las pruebas. |
+| `support/flujos.ts` | Pasos de precondición (ingresar, llenar el carrito, llegar al resumen) armados con page objects. |
+| `tests/` | Un archivo por regla. Cada prueba se llama `Regla · Técnica · caso` y cada aserción dice qué regla revisa. |
+| `DEFECTOS.md` | Defectos encontrados, uno por fila. |
+
+| Regla | Técnica | Archivo |
+|---|---|---|
+| Ingreso | Tabla de decisión, partición de equivalencia (usuario `lento`) | `ingreso.spec.ts` |
+| Sesión | Transición de estados | `sesion.spec.ts` |
+| Catálogo y precios | Particiones de equivalencia | `catalogo.spec.ts` |
+| Carrito | Particiones de equivalencia, transición de estados | `carrito.spec.ts` |
+| Cantidad | Valores límite, particiones de equivalencia | `cantidad.spec.ts` |
+| Datos de envío | Tabla de decisión, valores límite, particiones de equivalencia | `datos-envio.spec.ts` |
+| Cupón | Particiones de equivalencia | `cupon.spec.ts` |
+| Descuento y Total | Valores límite | `descuento.spec.ts` |
+| Envío, Envío gratis y Total | Particiones de equivalencia, valores límite, tabla de decisión | `envio.spec.ts` |
+| Confirmación | Transición de estados | `confirmacion.spec.ts` |

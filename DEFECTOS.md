@@ -1,0 +1,11 @@
+# Defectos encontrados
+
+Defectos de Café de Altura que encontró la suite al compararla con las reglas del README. Cada uno deja en rojo las pruebas de la última columna, en Chromium, Firefox y WebKit. Todas las compras usan la contraseña `calidad2026`, y los montos se ven en la página de resumen.
+
+| # | Usuario | Regla | Pasos | Resultado esperado | Resultado obtenido | Prueba en rojo |
+|---|---|---|---|---|---|---|
+| D1 | `estandar` | Descuento | Agregar Molino manual y Café de Huehuetenango 250 g, poner 2 unidades de Huehuetenango (subtotal Q500), continuar con Ana, López y CP `02001` sin cupón | Descuento de 10 % (-Q50.00) y total Q450.00 | Descuento de 5 % (-Q25.00) y total Q475.00. El 10 % se aplica solo con subtotales mayores de Q500, no desde Q500 | `descuento.spec.ts` › subtotal Q500 aplica 10 % |
+| D2 | `estandar` | Envío gratis (cupón) | Agregar Café de Huehuetenango 250 g (subtotal Q75), continuar con Ana, López, CP `02001` y cupón `ENVIOGRATIS` | Envío Q0.00 y total Q75.00, porque el cupón vale para cualquier código postal | Envío Q40.00 y total Q115.00. El cupón se acepta, pero solo da envío gratis con un CP que empieza con `01` | `envio.spec.ts` › Tabla de decisión R6 |
+| D3 | `problema` | Catálogo | Entrar al catálogo y elegir "Precio (menor a mayor)" o "Precio (mayor a menor)" | Productos ordenados por precio: Filtros, Taza, Huehuetenango, Antigua, Prensa, Molino (o al revés) | Los productos no se ordenan y quedan en el orden fijo de la tienda: Huehuetenango, Antigua, Taza, Prensa, Molino, Filtros | `catalogo.spec.ts` › ordenar por Precio (menor a mayor) y (mayor a menor) (problema) |
+| D4 | `problema` | Carrito | En el catálogo, agregar Taza de barro y abrir el carrito | El carrito tiene una línea de Taza de barro, Q60.00, cantidad 1 | El carrito tiene Filtros de papel (100) en lugar de Taza de barro, y en el catálogo queda marcado Filtros con el botón "Quitar" | `carrito.spec.ts` › agregar Taza de barro lo deja en el carrito (problema) |
+| D5 | `problema` | Datos de envío | Agregar un producto, continuar al pago y llenar nombre Ana, apellido López y CP `01001` | Pasa al resumen del pedido | Muestra "Falta el apellido." aunque el apellido está lleno y no deja pasar al resumen, así que `problema` no puede comprar | `datos-envio.spec.ts` › Tabla de decisión R1 (problema) |
